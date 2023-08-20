@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./static/img/final1.png"><br>
+  <img src="static/img/final1.png"><br>
 </div>
 
 -----------------
@@ -18,6 +18,7 @@
 ## Table of Contents
 
 - [Main Features](#main-features)
+- [Where to get it](#where-to-get-it)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Documentation](#documentation)
@@ -30,6 +31,12 @@
 - Generates informative visualizations that highlight performance hotspots.
 - Supports integration with popular Python development environments.
 - Designed for ease of use and seamless integration into existing projects.
+
+
+## Where to get it
+The source code is currently hosted on GitHub at: https://github.com/codepulse-developers/codepulse
+
+Binary installers for the latest released version are available at the Python Package Index (PyPI).
 
 ## Installation
 
