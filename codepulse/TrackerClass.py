@@ -1,10 +1,11 @@
+from .utils import modify_function, process_logs, display_results
+from .InternalTrackingState import InternalState
+import time
 
-from .utils import modify_function , process_logs, display_results
-import time 
 
-class Tracker:
+class Tracker(InternalState):
     """
-    A utility class that tracks the execution time and results of a given function over multiple iterations.
+    Main Module class that tracks the execution time and results of a given function over multiple iterations.
 
     Parameters
     ----------
@@ -23,12 +24,8 @@ class Tracker:
         Number of iterations to run the function.
     namespace : dict
         Namespace for the function's execution environment.
-    modified_function_string : str
-        String representation of the modified function.
     executable_function : callable
         The executable version of the tracked function.
-    analysis_df : pandas DataFrame or None
-        DataFrame containing analysis results, or None if analysis hasn't been performed.
 
     Methods
     -------
@@ -58,16 +55,15 @@ class Tracker:
     The tracked function's execution times and analysis results will be displayed in a formatted table.
 
     """
-    def __init__(self, function_object, namespace = {}, no_iterations = 3):
-        self.function_object = function_object 
-        self.no_iterations = no_iterations 
-        self.modified_function_string = modify_function(self.function_object)
-        self.namespace = {'time': time} 
+
+    def __init__(self, function_object, namespace={}, no_iterations=3):
+        self.function_object = function_object
+        self.no_iterations = no_iterations
+        self.namespace = {"time": time}
         self.namespace.update(namespace)
 
-        self.get_executable()
-        self.analysis_df = None 
-
+        super().__init__(modify_function(self.function_object))
+        self.executable_function = self.get_executable()
 
     def __call__(self, *param):
         items = []
@@ -76,15 +72,14 @@ class Tracker:
             t1 = time.time()
             _ = self.executable_function(*param)
             t2 = time.time()
-            total_time.append( (t2 - t1)*1000) 
+            total_time.append((t2 - t1) * 1000)
             items.append(_[-1])
-        self.analyse_df = process_logs(items)
-        display_results(self.analyse_df, total_time, self.no_iterations, self.function_object.__name__)
-        
+        self[1] = process_logs(items)
+        display_results(
+            self[1], total_time, self.no_iterations, self.function_object.__name__
+        )
 
-  
     def get_executable(self):
-        exec(self.modified_function_string, self.namespace)
-        self.executable_function = self.namespace[self.function_object.__name__]
-
-
+        namespace = self.namespace.copy()
+        exec(self[0], namespace)
+        return namespace[self.function_object.__name__]

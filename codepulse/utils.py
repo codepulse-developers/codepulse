@@ -1,6 +1,7 @@
 import inspect
 import pandas as pd
 
+
 def modify_function(function_object):
     """
     Modify a given function by adding time tracking statements after each line.
