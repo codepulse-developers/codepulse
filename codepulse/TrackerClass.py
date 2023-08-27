@@ -65,12 +65,12 @@ class Tracker(InternalState):
         super().__init__(modify_function(self.function_object))
         self.executable_function = self.get_executable()
 
-    def __call__(self, *param):
+    def __call__(self, *param, **params):
         items = []
         total_time = []
         for i in range(self.no_iterations):
             t1 = time.time()
-            _ = self.executable_function(*param)
+            _ = self.executable_function(*param, **params)
             t2 = time.time()
             total_time.append((t2 - t1) * 1000)
             items.append(_[-1])
